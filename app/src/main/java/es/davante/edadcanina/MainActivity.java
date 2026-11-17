@@ -10,13 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import es.davante.edadcanina.databinding.ActivityMainBinding;
+import es.davante.edadcanina.modelo.EdadCaninaModelo;
+import es.davante.edadcanina.modelo.Validacion;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int FACTOR_CANINO = 7;
-    private static final int EDAD_MINIMA = 1;
-    private static final int EDAD_MAXIMA = 30;
+
     private ActivityMainBinding binding;
+    private final EdadCaninaModelo modelo = new EdadCaninaModelo();
 
 
 
@@ -40,29 +41,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void calcularEdad(){
 
-            String ageString = binding.ageInput.getText().toString().trim();
+        modelo.setTexto(binding.ageInput.getText().toString());
 
-            if(ageString.isEmpty()){
+        Validacion resultado = modelo.calcular();
+
+        switch(resultado){
+            case VACIO:
                 mostrarError(getString(R.string.error_vacio));
-                return;
-            }
+                break;
 
-        int age;
-        try {
-            age = Integer.parseInt(ageString);
-        } catch (NumberFormatException e) {
-            mostrarError(getString(R.string.error_no_numero));
-            return;
+            case NO_NUMERICO:
+                mostrarError(getString(R.string.error_no_numero));
+                break;
+
+            case FUERA_RANGO:
+                mostrarError(getString(R.string.error_rango));
+                break;
+
+            case CORRECTO:
+                binding.ageInput.setError(null);
+                binding.resultText.setText(getString(R.string.tu_edad_format, modelo.getEdadCanina()));
+                break;
+
         }
 
-        if (age < EDAD_MINIMA || age > EDAD_MAXIMA) {
-            mostrarError(getString(R.string.error_rango, EDAD_MINIMA, EDAD_MAXIMA));
-            return;
-        }
 
-        binding.ageInput.setError(null);
-        int dogYears = age * FACTOR_CANINO;
-        binding.resultText.setText(getString(R.string.tu_edad_format, dogYears));
 
     }
 }
