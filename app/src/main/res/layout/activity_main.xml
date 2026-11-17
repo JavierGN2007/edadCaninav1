@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <import type="android.view.View" />
+        <import type="es.davante.edadcanina.modelo.Validacion" />
+        <variable
+            name="modelo"
+            type="es.davante.edadcanina.modelo.EdadCaninaModelo" />
+    </data>
+
 <androidx.appcompat.widget.LinearLayoutCompat
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -52,6 +60,7 @@
         android:maxLength="2"
         android:gravity="center"
         android:importantForAutofill="no"
+        android:text="@={modelo.texto}"
         />
 
  <TextView
@@ -61,6 +70,8 @@
      android:gravity="center"
      android:layout_marginTop="20dp"
      android:id="@+id/result_text"
+     android:text="@{@string/tu_edad_format(modelo.edadH * modelo.FACTOR_CANINO)}"
+     android:visibility="@{modelo.valid == Validacion.CORRECTO ? View.VISIBLE : View.GONE}"
      />
 
     <Button

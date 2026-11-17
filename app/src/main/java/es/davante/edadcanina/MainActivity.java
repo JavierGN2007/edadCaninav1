@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setModelo(modelo);
 
 
 
@@ -55,12 +56,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case FUERA_RANGO:
-                mostrarError(getString(R.string.error_rango));
+                mostrarError(getString(R.string.error_rango, EdadCaninaModelo.EDAD_MINIMA, EdadCaninaModelo.EDAD_MAXIMA));
                 break;
 
             case CORRECTO:
                 binding.ageInput.setError(null);
-                binding.resultText.setText(getString(R.string.tu_edad_format, modelo.getEdadCanina()));
                 break;
 
         }
