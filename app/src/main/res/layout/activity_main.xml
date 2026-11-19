@@ -9,6 +9,10 @@
         <variable
             name="modelo"
             type="es.davante.edadcanina.modelo.EdadCaninaModelo" />
+        <variable
+            name="controlador"
+            type="es.davante.edadcanina.controlador.EdadCaninaControlador"
+            />
     </data>
 
 <androidx.appcompat.widget.LinearLayoutCompat
@@ -75,14 +79,32 @@
      android:visibility="@{modelo.valid == Validacion.CORRECTO ? View.VISIBLE : View.GONE}"
      />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_margin="16dp"
         android:text="@string/btn_calc"
         android:textSize="22sp"
         android:id="@+id/btn_calc"
+        android:onClick="@{() -> controlador.calcular()}"
         />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            android:text="@string/btn_limp"
+            android:textSize="22sp"
+            android:id="@+id/btn_limp"
+            android:onClick="@{() -> controlador.limpiar()}"
+            />
+    </LinearLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -6,6 +6,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import es.davante.edadcanina.controlador.EdadCaninaControlador;
 import es.davante.edadcanina.databinding.ActivityMainBinding;
 import es.davante.edadcanina.modelo.EdadCaninaModelo;
 
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private final EdadCaninaModelo modelo = new EdadCaninaModelo();
-
+    private final EdadCaninaControlador controlador = new EdadCaninaControlador(modelo);
 
 
     @Override
@@ -24,10 +25,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setModelo(modelo);
+        binding.setControlador(controlador);
 
-
-
-        binding.btnCalc.setOnClickListener(view -> modelo.calcular());
 
     }
 
