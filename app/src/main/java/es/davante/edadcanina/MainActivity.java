@@ -14,10 +14,12 @@ import es.davante.edadcanina.modelo.Validacion;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Constantes para evitar errores tipográficos al guardar y recuperar las claves en el Bundle
     private static final String CLAVE_TEXTO = "texto";
     private static final String CLAVE_CALCULADO = "calculado";
 
     private ActivityMainBinding binding;
+    // Se crea una única instancia del modelo que se comparte entre el controlador y el binding
     private final EdadCaninaModelo modelo = new EdadCaninaModelo();
     private final EdadCaninaControlador controlador = new EdadCaninaControlador(modelo);
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
+        // Si savedInstanceState no es null, la Activity se está recreando tras un cambio de configuración
+        // Se restaura el estado del modelo antes de enlazarlo al binding para que la vista nazca ya actualizada
         if(savedInstanceState !=null){
             String textoGuardado = savedInstanceState.getString(CLAVE_TEXTO, "");
             boolean calculado = savedInstanceState.getBoolean(CLAVE_CALCULADO, false);
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Infla el layout con DataBinding y entrega las referencias de modelo y controlador al XML
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setModelo(modelo);
         binding.setControlador(controlador);
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Se ejecuta justo antes de que Android destruya la Activity
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putString(CLAVE_TEXTO, modelo.getTexto());

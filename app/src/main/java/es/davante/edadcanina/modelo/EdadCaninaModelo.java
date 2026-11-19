@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import es.davante.edadcanina.BR;
 
+// Hereda de BaseObservable para notificar cambios directamente a la vista mediante DataBinding
 public class EdadCaninaModelo extends BaseObservable {
     public static final int FACTOR_CANINO = 7;
     public static final int EDAD_MINIMA = 1;
@@ -36,12 +37,14 @@ public class EdadCaninaModelo extends BaseObservable {
     }
 
     public void setTexto (String texto){
+//Evita bucles infinitos con el enlace bidireccional y notificaciones innecesarias
         if(Objects.equals(this.texto, texto)){
             return;
         }
 
         this.texto = texto;
         this.edadH = 0;
+// Al modificar la entrada se invalida el cálculo previo para ocultar errores o resultados antiguos
         setValid(Validacion.SIN_CALCULAR);
         notifyPropertyChanged(BR.texto);
         notifyPropertyChanged(BR.edadH);
@@ -66,7 +69,7 @@ public class EdadCaninaModelo extends BaseObservable {
     }
 
 
-
+// Valida la entrada en orden antes de calcular, devolviendo un estado tipado para que la vista decida cómo representarlo sin depender de textos fijos
     public Validacion calcular(){
         String limpio = texto.trim();
         if(limpio.isEmpty()){
@@ -93,6 +96,7 @@ public class EdadCaninaModelo extends BaseObservable {
 
     }
 
+// Restaura el estado inicial reutilizando los setters para garantizar que se disparen todas las notificaciones de DataBinding hacia la interfaz
     public void limpiar(){
         setTexto("");
         setEdadH(0);
