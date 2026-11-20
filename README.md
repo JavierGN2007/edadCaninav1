@@ -191,3 +191,30 @@ Comprueba en GitHub que tu fork tiene ahora dos ramas: `main` y `v2-validacion`.
 - [ ] No quedan números mágicos en `MainActivity`.
 - [ ] `onCreate()` solo prepara la pantalla; la lógica está en `calcularEdad()`.
 - [ ] El trabajo está en la rama `v2-validacion`, no en `main`.
+
+
+# 🐶 EdadCaninaMVC
+
+## Reto
+
+He implementado el reto del **botón inteligente**, haciendo que el botón **Calcular** esté desactivado si el campo de entrada de texto está vacío.
+
+Se ha resuelto implementando una expresión declarativa de DataBinding en el activity_main.xml, sin tocar nada de Java. La expresión usada es esta: **android:enabled="@{!modelo.texto.trim().isEmpty()}**
+
+## Preguntas
+
+### ¿Qué diferencia hay entre @{...} y @={...}?
+El primero es un enlace unidireccional, en el que la información solo va del Modelo a la Vista, mientras que el segundo es un enlace bidireccional, en el que la información va en ambos sentidos.
+
+### ¿Qué ocurre, paso a paso, desde que pulsas Calcular hasta que aparece «42»?
+* Al escribir 6 en el EditText, el enlace bidireccional ya ha guardado el valor "6" en el atributo texto del modelo
+* Al pulsar el botón "Calcular", DataBinding ejecuta la expresión android:onClick="@{() -> controlador.calcular()}", invocando al método calcular() de EdadCaninaControlador
+* El controlador, sin tocar ninguna vista, delega la orden llamando a modelo.calcular()
+* EdadCaninaModelo limpia espacios, hace todas las comprobaciones sobre el valor guardado en el atributo texto (en este caso 6) y lo convierte en un entero, actualiza edadH = 6 y cambia el estado valid a Validacion.CORRECTO
+* Los setters del modelo llaman a notifyPropertyChanged sobre los campos @Bindable
+* DataBinding detectan la notificación y actualiza automáticamente los componentes del XML. El BindingAdapter recibe Validacion.CORRECTO y limpia cualquier error previo en el EditText, y el TextView del resultado pasa a ser visible y evalúa el formato de salida de 6*7, mostrando en pantalla "Si tu perro fuera humano tendría 42 años".
+
+### ¿Qué cambiarías para que el factor fuera 6 en vez de 7, y por qué solo tocas un fichero?
+Únicamente modificaría el valor de la constante FACTOR_CANINO (de 7 a 6) dentro de la clase EdadCaninaModelo.
+
+Solo se toca un fichero porque en el patrón MVC toda lógica y reglas de negocio están centralizadas en el Modelo. Al usar una única constante como fuente de verdad, el resto de capas obtienen el resultado directamente de él, sin tener que modificar la Activity ni ningún XML.
